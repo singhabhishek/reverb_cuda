@@ -7,8 +7,6 @@
 #include <cuda_runtime.h>
 #include <sys/time.h> 
 
-//#define WITH_STREAM 1
-//#define WITHOUT_STREAM 1
 #define LOUDEST_SAMPLE 51.344872
 #define NORMALIZE_RATIO 1.5
 #define THREADSPERBLOCK 768
@@ -120,27 +118,11 @@ __global__ void conv_shared(const float *d_Signal, const float *d_ConvKernel, fl
     d_Result_GPU[i] = temp;
 }
 
-__global__ void conv_Kernel(float *A, float *B, float *C, int P, int N)
-{
-	int idx = threadIdx.x+blockDim.x*blockIdx.x;
-	int radius = (P-1)/2;
-	if ((idx < (N-radius)) && (idx >= radius)){
-		float my_sum = 0;
-		for (int j = -radius; j <= radius; j++)
-		{
-			my_sum += A[idx+j]*B[j+radius];
-		}
-		C[idx] = my_sum;
-	}
-}
-
 int main(int argc, char** argv)
 {
     // Initialize the variables
     enum {ARG_NAME, ARG_INFILE1, ARG_INFILE2, ARG_OUTFILE, ARG_NARGS};
     int i, k;
-    time_t current_time, end_time;
-    double process_time;
     SNDFILE* infile1;
     SNDFILE* infile2;
     SNDFILE* outfile;
@@ -162,8 +144,10 @@ int main(int argc, char** argv)
 	float *d_song = NULL;
 	float *d_imp = NULL;
 	float *d_conv = NULL;
+	struct timeval t1, t2;
+	double elapsedTime;
+	gettimeofday(&t1, NULL);
 
-    current_time = time(NULL);
 
     // Check the inputs
     if (argc != ARG_NARGS)
@@ -249,9 +233,6 @@ int main(int argc, char** argv)
         return -1;
     }
 
-	struct timeval t1, t2;
-	double elapsedTime;
-	gettimeofday(&t1, NULL);
 
 	// Split channels
 #ifdef CPU
@@ -295,10 +276,6 @@ int main(int argc, char** argv)
 	}
 #endif
 
-	gettimeofday(&t2, NULL);
-	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;
-	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;
-    printf("Convolution complete in %f ms.\n", elapsedTime);
 
     for (k = 0; k < props1.channels; k++)
 		memset(buf3[k], outFrames, 0);
@@ -483,9 +460,9 @@ int main(int argc, char** argv)
     if (b1) free(b1);
     if (b2) free(b2);
 
-    // Exit with an all clear
-    end_time = time(NULL);
-    process_time = difftime(end_time, current_time);
-    printf("Convolution complete in %f seconds.\n", process_time);
+	gettimeofday(&t2, NULL);
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;
+    printf("Total time taken %f ms.\n", elapsedTime);
     return 0;
 }

@@ -24,7 +24,7 @@ Dependencies:
 - $ make clean
 
 How to Use:
-- ./reverb_effect <<song>> <<impulse>> <<output>>
+- ./reverb_effect song impulse output
  
 Example Usage:
  - ./reverb_effect dog_11025_stereo_10sec.wav imp_11025_stereo_9sec.wav new.wav

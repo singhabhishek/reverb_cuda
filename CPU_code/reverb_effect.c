@@ -44,33 +44,6 @@ void normalize(float* buffer, int num_samps, float maxval)
     }
 }
 
-static inline void loadBar(int x, int n, int r, int w)
-{
-    int i;
-    // Only update r times
-    if (x % (n/r) != 0) return;
-
-    // Calculate the ratio of complete-to-incomplete.
-    float ratio = x/(float)n;
-    int c = ratio * w;
-
-    // Show the percentage complete
-    printf("%3d%% [", (int)(ratio*100));
-
-    // Show the load bar
-    for (i=0; i<c; i++)
-    {
-        printf("=");
-    }
-    for (i=c; i<w; i++)
-    {
-        printf(" ");
-    }
-
-    // ANSI Control codes to go back to the previous line and clear it
-    printf("]\n\033[F\033[J");
-}
-
 int main(int argc, char** argv)
 {
     // Initialize the variables
@@ -91,9 +64,10 @@ int main(int argc, char** argv)
     float** buf1;
     float** buf2;
     float** buf3;
+	struct timeval t1, t2;
+	double elapsedTime;
+	gettimeofday(&t1, NULL);
 
-    // Say hello
-    printf("Audio Convolver\nby Kelcey Swain\n\n");
     current_time = time(NULL);
 
     // Check the inputs
@@ -188,7 +162,6 @@ int main(int argc, char** argv)
         printf("Convolving channel %i of %i\n", k+1, props1.channels );
     	for (i = 0; i < props1.frames; i++)
     	{
-            loadBar(i, props1.frames, 100, 100);
     		for ( j = 0; j < props2.frames; j++)
     		{
     			buf3[k][i+j] += buf1[k][i] * buf2[k][j];
@@ -224,10 +197,9 @@ int main(int argc, char** argv)
     if (b1) free(b1);
     if (b2) free(b2);
 
-    // Exit with an all clear
-    end_time = time(NULL);
-    process_time = difftime(end_time, current_time);
-
-    printf("Convolution complete in %.1f seconds.\n", process_time);
+	gettimeofday(&t2, NULL);
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;
+    printf("Total time taken %f ms.\n", elapsedTime);
     return 0;
 }

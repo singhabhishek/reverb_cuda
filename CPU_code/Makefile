@@ -5,6 +5,8 @@ CC	:= gcc
 
 CCFLAGS	:= -g
 
+all: reverb_effect
+
 reverb_effect: reverb_effect.c
 	$(CC) $(INC) $(CCFLAGS) reverb_effect.c $(LIB) -o reverb_effect
 

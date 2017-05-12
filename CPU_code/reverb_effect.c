@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #include <sndfile.h>
 
 void channel_split(float* buffer, int num_frames, float** chan_buffers, int num_channels)
@@ -179,12 +180,7 @@ int main(int argc, char** argv)
     channel_split(b2, props2.frames, buf2, props2.channels);
 
     for (k = 0; k < props1.channels; k++)
-    {
-    	for (i = 0; i < outFrames; i ++)
-    	{
-    		buf3[k][i] = 0.0;
-    	}
-    }
+		memset(buf3[k], outFrames, 0);
     
     // Convolve
     for (k = 0; k < props1.channels; k++)

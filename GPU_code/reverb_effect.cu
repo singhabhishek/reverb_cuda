@@ -8,7 +8,7 @@
 #include <sys/time.h> 
 
 //#define WITH_STREAM 1
-#define WITHOUTSTREAM 1
+//#define WITHOUT_STREAM 1
 #define LOUDEST_SAMPLE 51.344872
 #define NORMALIZE_RATIO 1.5
 #define THREADSPERBLOCK 768
@@ -305,6 +305,12 @@ int main(int argc, char** argv)
 
 #ifdef WITH_STREAM
 	printf("WITH STREAM!!!!\n"); 
+	if(props1.channels == 1)
+	{
+		printf("Stream not supported with mono audio file\n");
+		return -1;
+
+	}
 	cudaStream_t stream0, stream1;
 	cudaStreamCreate(&stream0);
 	cudaStreamCreate(&stream1);
@@ -349,7 +355,7 @@ int main(int argc, char** argv)
 	cudaMemcpyAsync(buf3[1], d_C1, props3.frames*sizeof(float), cudaMemcpyDeviceToHost, stream1);
 #endif
 
-#ifdef WITHOUTSTREAM
+#ifdef WITHOUT_STREAM
 	printf("WITHOUT STREAM!!!!\n"); 
 	// Allocate memory for Song on device
     err = cudaMalloc((void **)&d_song, props1.frames*sizeof(float));

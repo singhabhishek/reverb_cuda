@@ -12,43 +12,43 @@ This project compares performance of convolution reverb effect on CPU and GPU.
 
 ## Building Package:
 ### For CPU package:
-**Change directory to CPU folder**
+#### Change directory to CPU folder
 - $ cd CPU_code  
 
-**To Build package**
+#### To Build package
 - $ make all
 
-**To clean package**
+#### To clean package
 - $ make clean
 
-**Example Usage:**
+#### Example Usage:
  - ./reverb_effect dog_11025_stereo_10sec.wav imp_11025_stereo_9sec.wav new.wav
 
 ### For GPU package:
-**Change directory to GPU folder**
+#### Change directory to GPU folder
 - $ cd GPU_code 
 
-**To Build package with both stream and without stream support**
+#### To Build package with both stream and without stream support
 - $ make all
 
-**To Build package with stream**
+#### To Build package with stream
 - $ make reverb_effect_with_stream 
 
-**To Build package without stream support**
+#### To Build package without stream support
 - $ make reverb_effect_without_stream
 
-**To clean package**
+#### To clean package
 - $ make clean // To clean package
 
 
-**Example Usage:**
-*With Stream support*
+#### Example Usage:
+**With Stream support**
  - ./reverb_effect_with_stream dog_11025_stereo_10sec.wav imp_11025_stereo_9sec.wav new.wav
 
-*Without Stream support*
+**Without Stream support**
  - ./reverb_effect_without_stream dog_11025_stereo_10sec.wav imp_11025_stereo_9sec.wav new.wav
 
-**NOTE:**
+### NOTE:
 Package only support wav audio file with 1/2 channels. 
 Mono audio files are not support with stream optimization
 

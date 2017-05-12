@@ -38,7 +38,7 @@ This project compares performance of convolution reverb effect on CPU and GPU.
 - $ make reverb_effect_without_stream
 
 #### To clean package
-- $ make clean // To clean package
+- $ make clean
 
 
 #### Example Usage:

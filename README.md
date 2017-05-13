@@ -49,8 +49,8 @@ This project compares performance of convolution reverb effect on CPU and GPU.
  - ./reverb_effect_without_stream dog_11025_stereo_10sec.wav imp_11025_stereo_9sec.wav new.wav
 
 ### NOTE:
-Package only support wav audio file with 1/2 channels. 
-Mono audio files are not support with stream optimization
+- Package only support wav audio file with 1/2 channels. Mono audio files are not support with stream optimization
+- Project Github Link: https://github.com/singhabhishek/reverb_cuda
 
 
 
